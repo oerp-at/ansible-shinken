@@ -1,0 +1,154 @@
+---
+# tasks file for shinken
+
+- name: install packages
+  apt:
+    name:      
+      - sudo
+      - git
+      - rsync
+      - build-essential
+      - python-dev
+      - libssl-dev
+      - libcurl4-openssl-dev
+      - libffi-dev      
+      - python-pycurl
+      - pipenv
+
+- name: add group shinken
+  group:
+    name: shinken
+    state: present    
+  notify: update-shinken
+
+- name: add user shinken
+  user:
+    name: shinken
+    state: present
+    group: shinken
+    shell: /bin/bash
+  notify: update-shinken
+  
+- name: checkout shinken
+  become_user: shinken
+  become: yes
+  git:
+    repo: 'https://github.com/oerp-at/shinken.git'
+    dest: /home/shinken/src
+  register: gitsource
+  notify: update-shinken
+
+- name: update python environment
+  become_user: shinken
+  become: yes
+  when: gitsource.changed
+  shell: pipenv update
+  tags: 
+  - full
+  args:
+    chdir: /home/shinken/src
+
+- name: check etc
+  stat:
+    path: /etc/shinken
+  register: shinken_etc
+
+- name: create initial config
+  shell: "cp -a /home/shinken/src/etc /etc/shinken"
+  when: shinken_etc.stat.isdir is undefined
+  notify: update-shinken
+
+- name: check libexec
+  stat:
+    path: /home/shinken/libexec
+  register: shinken_libexec
+
+- name: create initial libexec
+  shell: "cp -a /home/shinken/src/libexec /home/shinken/libexec"
+  when: shinken_libexec.stat.isdir is undefined
+  notify: update-shinken
+
+- name: create directories
+  file:    
+    path: "{{ item }}"
+    mode: '0750'
+    state: directory
+    owner: shinken
+    group: shinken  
+  notify: update-shinken
+  loop:
+    - /home/shinken/share
+    - /home/shinken/inventory
+    - /home/shinken/modules        
+    - /home/shinken/doc
+    - /home/shinken/libexec    
+    - /var/log/shinken
+    - /var/run/shinken
+    - /home/shinken/.local/bin
+
+- name: shinken.cfg
+  copy:
+    src: files/shinken.cfg
+    dest: /etc/shinken/shinken.cfg
+  notify: update-shinken
+
+- name: shinken-cli.ini
+  copy:
+    src: files/shinken.ini
+    dest: /home/shinken/.shinken.ini
+  notify: update-shinken
+
+- name: broker-master.cfg
+  copy:
+    src: files/brokers/broker-master.cfg
+    dest: /etc/shinken/brokers/broker-master.cfg
+  notify: update-shinken
+
+- name: copy daemons
+  copy:
+    src: files/daemons/{{ item }}
+    dest: /etc/shinken/daemons/{{ item }}
+  notify: update-shinken
+  loop:
+    - brokerd.ini
+    - pollerd.ini
+    - reactionnerd.ini
+    - receiverd.ini
+    - schedulerd.ini
+  
+- name: copy services
+  copy:
+    src: files/systemd/shinken-{{ item }}.service
+    dest: /etc/systemd/system/shinken-{{ item }}.service
+  notify: update-shinken
+  loop:
+    - arbiter
+    - broker
+    - poller
+    - reactionner
+    - receiver
+    - scheduler  
+
+- name: copy shinken command
+  copy:
+    src: files/shinken
+    dest: /home/shinken/.local/bin/shinken
+    owner: shinken
+    group: shinken
+    mode: '0770'
+    
+
+# WEBUI Module 
+
+- name: auth_ldap3.cfg
+  template:
+    src: templates/auth_ldap3.cfg.j2
+    dest: /etc/shinken/modules/auth_ldap3.cfg
+  notify: update-shinken
+
+- name: webui2.cfg
+  template:
+    src: templates/webui2.cfg.j2
+    dest: /etc/shinken/modules/webui2.cfg
+  notify: update-shinken
+

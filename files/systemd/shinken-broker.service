@@ -1,0 +1,19 @@
+[Unit]
+Description=shinken-broker
+After=network.target
+
+[Service]
+User=shinken
+Type=forking
+Environment="LANG=de_DE.UTF-8"
+Environment="LC_ALL=de_DE.UTF-8"
+PIDFile=/var/run/shinken/brokerd.pid
+WorkingDirectory=/home/shinken/src
+ExecStart=/usr/bin/pipenv run python2.7 /home/shinken/src/bin/shinken-broker.py -d -c /etc/shinken/daemons/brokerd.ini
+ExecReload=/bin/kill -1 -- $MAINPID
+ExecStop=/bin/kill -- $MAINPID
+TimeoutStopSec=5
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,58 @@
+---
+# handlers file for shinken
+
+- name: update modules
+  listen: update-shinken
+  shell:
+    cmd: /usr/bin/pipenv run python2.7 /home/shinken/src/bin/shinken install {{ item }}
+  loop:
+    - webui2
+    - auth-ldap3
+
+- name: restart shinken-scheduler  
+  systemd: 
+    state: restarted 
+    name: shinken-scheduler 
+    daemon_reload: yes
+    enabled: yes
+  listen: update-shinken
+
+- name: restart shinken-poller
+  systemd: 
+    state: restarted 
+    name: shinken-poller
+    daemon_reload: yes
+    enabled: yes
+  listen: update-shinken
+
+- name: restart shinken-reactionner
+  systemd: 
+    state: restarted 
+    name: shinken-reactionner
+    daemon_reload: yes
+    enabled: yes
+  listen: update-shinken
+
+- name: restart shinken-broker
+  systemd: 
+    state: restarted 
+    name: shinken-broker
+    daemon_reload: yes
+    enabled: yes
+  listen: update-shinken
+
+- name: restart shinken-receiver
+  systemd: 
+    state: restarted 
+    name: shinken-receiver
+    daemon_reload: yes
+    enabled: yes
+  listen: update-shinken
+
+- name: restart shinken-arbiter  
+  systemd: 
+    state: restarted 
+    name: shinken-arbiter 
+    daemon_reload: yes
+    enabled: yes
+  listen: update-shinken

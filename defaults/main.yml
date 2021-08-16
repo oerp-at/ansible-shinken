@@ -1,0 +1,15 @@
+---
+# defaults file for shinken
+
+shinken_workdir: /var/run/shinken
+shinken_logdir: /var/log/shinken
+shinken_modules_dir: /home/shinken/modules
+shinken_etc: /etc/shinken
+shinken_lib: /home/shinken
+shinken_share: /home/shinken/share
+shinken_cli: /home/shinken/packs
+shinken_doc: /home/shinken/doc
+shinken_inventory: /home/shinken/inventory
+shinken_libexed: /home/shinken/libexec
+shinken_photos: /home/shinken/share/photos
+shinken_config: /home/shinken/config
