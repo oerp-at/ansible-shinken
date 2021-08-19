@@ -62,8 +62,8 @@ define module {
    # with different parameters than the default ones.
 
    # Database URI
-   #uri                        mongodb://localhost
-
+   uri                        mongodb://localhost
+   
    # If you are running a MongoDB cluster (called a “replica set” in MongoDB),
    # you need to specify it's name here.
    # With this option set, you can also write the mongodb_uri as a comma-separated
@@ -71,7 +71,7 @@ define module {
    #replica_set
 
    # Database name where to fetch the logs/availability collections
-   #database                   shinken
+   database                   shinken
    # User authentication for database access
    #username
    #password
@@ -82,7 +82,6 @@ define module {
    # Hosts availability collection name
    #hav_collection             availability
 
-
    ## Modules for WebUI
    ## Helpdesk:
    # You may use this external modules:
@@ -91,7 +90,7 @@ define module {
 
 
    ## Declare the list of external modules
-   modules auth-ldap3
+   modules auth-active-directory
 
 
    # Web server configuration
@@ -120,7 +119,7 @@ define module {
 
 
    # Configuration directory
-   #config_dir                {{ shinken_config }}
+   config_dir                {{ shinken_webui_config }}
 
    # Share directory
    share_dir                  {{ shinken_share }}
@@ -129,7 +128,7 @@ define module {
    photos_dir                 {{ shinken_photos }}
 
    # For external plugins to load on webui
-   #additional_plugins_dir
+   additional_plugins_dir     {{ shinken_webui_additional_plugins_dir }}
 
 
 

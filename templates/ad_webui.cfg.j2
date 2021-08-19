@@ -1,0 +1,15 @@
+## Module:     auth-active-directory
+## Loaded by:   WebUI
+
+define module {
+    module_name      auth-active-directory
+    module_type      ad_webui
+
+    mode             ad
+
+    ldap_uri        {{ ldap_auth_uri }}
+    base_dn         {{ ldap_auth_base_dn }}
+    
+    username    {{ ldap_auth_user }}
+    password    {{ ldap_auth_password }}
+}

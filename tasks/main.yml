@@ -14,6 +14,31 @@
       - libffi-dev      
       - python-pycurl
       - pipenv
+      - gnupg
+      - libldap-dev
+      - libsasl2-dev 
+
+- name: add key for mongodb
+  apt_key:
+    url: https://www.mongodb.org/static/pgp/server-5.0.asc
+    state: present
+
+- name: add repository for monodb
+  ansible.builtin.apt_repository:
+    repo: "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/5.0 main"
+    state: present
+
+- name: install monodb
+  apt:
+    name:            
+      - mongodb-org
+
+- name: start monodb
+  systemd: 
+    state: started 
+    name: mongod
+    daemon_reload: yes
+    enabled: yes
 
 - name: add group shinken
   group:
@@ -82,9 +107,12 @@
     - /home/shinken/modules        
     - /home/shinken/doc
     - /home/shinken/libexec    
-    - /var/log/shinken
-    - /var/run/shinken
+    - /var/log/shinken    
     - /home/shinken/.local/bin
+    - /home/shinken/packs
+    - /home/shinken/webui
+    - /home/shinken/webui/config
+    - /home/shinken/webui/pages
 
 - name: shinken.cfg
   copy:
@@ -140,15 +168,19 @@
 
 # WEBUI Module 
 
-- name: auth_ldap3.cfg
+- name: ad_webui.cfg
   template:
-    src: templates/auth_ldap3.cfg.j2
-    dest: /etc/shinken/modules/auth_ldap3.cfg
+    src: templates/ad_webui.cfg.j2
+    dest: /etc/shinken/modules/ad_webui.cfg
+    owner: shinken
+    group: shinken
   notify: update-shinken
 
 - name: webui2.cfg
   template:
     src: templates/webui2.cfg.j2
     dest: /etc/shinken/modules/webui2.cfg
+    owner: shinken
+    group: shinken
   notify: update-shinken
 

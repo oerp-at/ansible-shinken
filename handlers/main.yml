@@ -6,8 +6,8 @@
   shell:
     cmd: /usr/bin/pipenv run python2.7 /home/shinken/src/bin/shinken install {{ item }}
   loop:
+    - auth-active-directory
     - webui2
-    - auth-ldap3
 
 - name: restart shinken-scheduler  
   systemd: 

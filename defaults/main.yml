@@ -12,4 +12,5 @@ shinken_doc: /home/shinken/doc
 shinken_inventory: /home/shinken/inventory
 shinken_libexed: /home/shinken/libexec
 shinken_photos: /home/shinken/share/photos
-shinken_config: /home/shinken/config
+shinken_webui_config: /home/shinken/webui/config
+shinken_webui_additional_plugins_dir: /home/shinken/webui/pages
