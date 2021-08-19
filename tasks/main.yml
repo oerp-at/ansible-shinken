@@ -16,7 +16,8 @@
       - pipenv
       - gnupg
       - libldap-dev
-      - libsasl2-dev 
+      - libsasl2-dev      
+      - monitoring-plugins
 
 - name: add key for mongodb
   apt_key:
