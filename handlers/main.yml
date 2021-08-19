@@ -15,7 +15,9 @@
     name: shinken-scheduler 
     daemon_reload: yes
     enabled: yes
-  listen: update-shinken
+  listen: 
+    - update-shinken
+    - update-shinken-scheduler
 
 - name: restart shinken-poller
   systemd: 
@@ -23,7 +25,9 @@
     name: shinken-poller
     daemon_reload: yes
     enabled: yes
-  listen: update-shinken
+  listen: 
+    - update-shinken
+    - update-shinken-poller
 
 - name: restart shinken-reactionner
   systemd: 
@@ -31,7 +35,9 @@
     name: shinken-reactionner
     daemon_reload: yes
     enabled: yes
-  listen: update-shinken
+  listen: 
+    - update-shinken
+    - update-shinken-reactionner
 
 - name: restart shinken-broker
   systemd: 
@@ -39,7 +45,9 @@
     name: shinken-broker
     daemon_reload: yes
     enabled: yes
-  listen: update-shinken
+  listen: 
+    - update-shinken
+    - update-shinken-broker
 
 - name: restart shinken-receiver
   systemd: 
@@ -47,7 +55,9 @@
     name: shinken-receiver
     daemon_reload: yes
     enabled: yes
-  listen: update-shinken
+  listen: 
+    - update-shinken
+    - update-shinken-receiver
 
 - name: restart shinken-arbiter  
   systemd: 
@@ -55,4 +65,6 @@
     name: shinken-arbiter 
     daemon_reload: yes
     enabled: yes
-  listen: update-shinken
+  listen: 
+    - update-shinken
+    - update-shinken-arbiter
