@@ -1,6 +1,7 @@
 ---
 # defaults file for shinken
 
+# folders
 shinken_workdir: /var/run/shinken
 shinken_logdir: /var/log/shinken
 shinken_modules_dir: /home/shinken/modules
@@ -14,3 +15,9 @@ shinken_libexed: /home/shinken/libexec
 shinken_photos: /home/shinken/share/photos
 shinken_webui_config: /home/shinken/webui/config
 shinken_webui_additional_plugins_dir: /home/shinken/webui/pages
+
+# ldap configuration
+ldap_auth_user: ldap-auth-user
+ldap_auth_password: unknown
+ldap_auth_uri: "ldap://ldap-server.local"
+ldap_auth_base_dn: "DC=company,DC=local"
