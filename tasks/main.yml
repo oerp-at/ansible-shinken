@@ -18,6 +18,14 @@
       - libldap-dev
       - libsasl2-dev      
       - monitoring-plugins
+      - libnumber-format-perl
+      - libconfig-inifiles-perl
+      - libdatetime-perl
+      - libclass-accessor-perl
+      - libconfig-tiny-perl
+      - libmath-calc-units-perl
+      - libparams-validate-perl
+      - libmonitoring-plugin-perl
 
 - name: add key for mongodb
   apt_key:
